@@ -1,0 +1,26 @@
+{
+  "name": "security-event-monitoring-system",
+  "version": "1.0.0",
+  "description": "Выпускной дипломный проект, представляющий собой систему для ОС Linux/Windows отслеживающую активность пользователей на клиентских машинах. При обнаружении нарушений создание сообщения на серверной части приложения и принятие первичных мер противодействия нарушителю.",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "start": "start node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwistZZ75/Security-event-monitoring-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TwistZZ75/Security-event-monitoring-system/issues"
+  },
+  "homepage": "https://github.com/TwistZZ75/Security-event-monitoring-system#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
