@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Выпускной дипломный проект, представляющий собой систему для ОС Linux/Windows отслеживающую активность пользователей на клиентских машинах. При обнаружении нарушений создание сообщения на серверной части приложения и принятие первичных мер противодействия нарушителю.",
   "main": "index.js",
-  "type":"module",
   "scripts": {
     "start": "start node server.js"
   },
@@ -20,7 +19,9 @@
   },
   "homepage": "https://github.com/TwistZZ75/Security-event-monitoring-system#readme",
   "dependencies": {
+    "@fastify/multipart": "^9.2.1",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "fastify": "^5.6.1"
   }
 }
