@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaSocial - Ваша социальная сеть</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+            color: #262626;
+            line-height: 1.5;
+        }
+
+        /* Навигационная панель */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: white;
+            border-bottom: 1px solid #dbdbdb;
+            padding: 10px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #efefef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 270px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            margin-left: 8px;
+            width: 100%;
+            outline: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-icons i {
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 975px;
+            margin: 80px auto 20px;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Лента постов */
+        .feed {
+            flex: 2;
+        }
+
+        .stories {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .story-avatar {
+            width: 66px;
+            height: 66px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .story-username {
+            font-size: 12px;
+            margin-top: 5px;
+            max-width: 66px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .post {
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .post-username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 600px;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+        }
+
+        .post-actions-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .post-actions i {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .post-likes {
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .post-caption {
+            padding: 0 16px;
+            margin-bottom: 8px;
+        }
+
+        .post-caption .username {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .post-comments {
+            padding: 0 16px;
+            color: #8e8e8e;
+            margin-bottom: 8px;
+        }
+
+        .post-time {
+            padding: 0 16px 12px;
+            color: #8e8e8e;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .add-comment {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-top: 1px solid #efefef;
+        }
+
+        .add-comment input {
+            border: none;
+            width: 100%;
+            outline: none;
+        }
+
+        .add-comment button {
+            background: none;
+            border: none;
+            color: #0095f6;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Боковая панель */
+        .sidebar {
+            flex: 1;
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+        }
+
+        .profile-info .username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profile-info .fullname {
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+
+        .suggestions {
+            background-color: white;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .suggestions-header span {
+            font-weight: 600;
+            color: #8e8e8e;
+        }
+
+        .suggestions-header a {
+            color: #262626;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .suggestion {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .suggestion-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        .suggestion-info .username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .suggestion-info .reason {
+            color: #8e8e8e;
+            font-size: 12px;
+        }
+
+        .suggestion a {
+            color: #0095f6;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #c7c7c7;
+            font-size: 11px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: #c7c7c7;
+            text-decoration: none;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1000px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+            
+            .container {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="logo">InstaSocial</div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Поиск">
+        </div>
+        <div class="nav-icons">
+            <i class="fas fa-home"></i>
+            <i class="far fa-paper-plane"></i>
+            <i class="far fa-compass"></i>
+            <i class="far fa-heart"></i>
+            <i class="far fa-user"></i>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <!-- Лента постов -->
+        <div class="feed">
+            <!-- Истории -->
+            <div class="stories">
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=1" alt="Пользователь">
+                    </div>
+                    <div class="story-username">anna_petrova</div>
+                </div>
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=2" alt="Пользователь">
+                    </div>
+                    <div class="story-username">ivan_ivanov</div>
+                </div>
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=3" alt="Пользователь">
+                    </div>
+                    <div class="story-username">maria_smirnova</div>
+                </div>
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=4" alt="Пользователь">
+                    </div>
+                    <div class="story-username">alex_kuznetsov</div>
+                </div>
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=5" alt="Пользователь">
+                    </div>
+                    <div class="story-username">olga_volkova</div>
+                </div>
+                <div class="story">
+                    <div class="story-avatar">
+                        <img src="https://i.pravatar.cc/150?img=6" alt="Пользователь">
+                    </div>
+                    <div class="story-username">dmitry_fedorov</div>
+                </div>
+            </div>
+
+            <!-- Пост 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img class="post-avatar" src="https://i.pravatar.cc/150?img=7" alt="Пользователь">
+                        <div class="post-username">travel_lover</div>
+                    </div>
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <img class="post-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Горный пейзаж">
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <i class="far fa-heart"></i>
+                        <i class="far fa-comment"></i>
+                        <i class="far fa-paper-plane"></i>
+                    </div>
+                    <i class="far fa-bookmark"></i>
+                </div>
+                <div class="post-likes">Нравится: 1,243</div>
+                <div class="post-caption">
+                    <span class="username">travel_lover</span>
+                    Прекрасный вид с вершины горы. Каждый подъем стоит того, чтобы увидеть такую красоту! 🏔️
+                </div>
+                <div class="post-comments">Посмотреть все комментарии (42)</div>
+                <div class="post-time">2 часа назад</div>
+                <div class="add-comment">
+                    <input type="text" placeholder="Добавьте комментарий...">
+                    <button>Опубликовать</button>
+                </div>
+            </div>
+
+            <!-- Пост 2 -->
+            <div class="post">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img class="post-avatar" src="https://i.pravatar.cc/150?img=8" alt="Пользователь">
+                        <div class="post-username">food_master</div>
+                    </div>
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <img class="post-image" src="https://images.unsplash.com/photo-1565958011703-44f9829ba187" alt="Еда">
+                <div class="post-actions">
+                    <div class="post-actions-left">
+                        <i class="far fa-heart"></i>
+                        <i class="far fa-comment"></i>
+                        <i class="far fa-paper-plane"></i>
+                    </div>
+                    <i class="far fa-bookmark"></i>
+                </div>
+                <div class="post-likes">Нравится: 892</div>
+                <div class="post-caption">
+                    <span class="username">food_master</span>
+                    Домашний ужин с любовью. Рецепт в описании профиля! 🍝 #кулинария #ужин
+                </div>
+                <div class="post-comments">Посмотреть все комментарии (28)</div>
+                <div class="post-time">5 часов назад</div>
+                <div class="add-comment">
+                    <input type="text" placeholder="Добавьте комментарий...">
+                    <button>Опубликовать</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Боковая панель -->
+        <div class="sidebar">
+            <div class="profile-card">
+                <img class="profile-avatar" src="https://i.pravatar.cc/150?img=9" alt="Профиль">
+                <div class="profile-info">
+                    <div class="username">your_username</div>
+                    <div class="fullname">Иван Петров</div>
+                </div>
+            </div>
+
+            <div class="suggestions">
+                <div class="suggestions-header">
+                    <span>Предложения для вас</span>
+                    <a href="#">Все</a>
+                </div>
+
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img class="suggestion-avatar" src="https://i.pravatar.cc/150?img=10" alt="Пользователь">
+                        <div class="suggestion-info">
+                            <div class="username">art_lover</div>
+                            <div class="reason">Интересное для вас</div>
+                        </div>
+                    </div>
+                    <a href="#">Подписаться</a>
+                </div>
+
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img class="suggestion-avatar" src="https://i.pravatar.cc/150?img=11" alt="Пользователь">
+                        <div class="suggestion-info">
+                            <div class="username">fitness_guru</div>
+                            <div class="reason">Интересное для вас</div>
+                        </div>
+                    </div>
+                    <a href="#">Подписаться</a>
+                </div>
+
+                <div class="suggestion">
+                    <div class="suggestion-user">
+                        <img class="suggestion-avatar" src="https://i.pravatar.cc/150?img=12" alt="Пользователь">
+                        <div class="suggestion-info">
+                            <div class="username">tech_news</div>
+                            <div class="reason">Интересное для вас</div>
+                        </div>
+                    </div>
+                    <a href="#">Подписаться</a>
+                </div>
+
+                <div class="footer">
+                    <div class="footer-links">
+                        <a href="#">Информация</a>
+                        <a href="#">Помощь</a>
+                        <a href="#">Пресса</a>
+                        <a href="#">API</a>
+                        <a href="#">Вакансии</a>
+                        <a href="#">Конфиденциальность</a>
+                        <a href="#">Условия</a>
+                        <a href="#">Места</a>
+                        <a href="#">Язык</a>
+                    </div>
+                    <div>© 2023 INSTASOCIAL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Простая функция для добавления лайков
+        document.querySelectorAll('.fa-heart').forEach(icon => {
+            icon.addEventListener('click', function() {
+                if (this.classList.contains('far')) {
+                    this.classList.remove('far');
+                    this.classList.add('fas');
+                    this.style.color = '#ed4956';
+                } else {
+                    this.classList.remove('fas');
+                    this.classList.add('far');
+                    this.style.color = '';
+                }
+            });
+        });
+
+        // Функция для добавления комментариев
+        document.querySelectorAll('.add-comment button').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                if (input.value.trim() !== '') {
+                    const commentsSection = this.closest('.post').querySelector('.post-comments');
+                    const currentText = commentsSection.textContent;
+                    
+                    if (currentText.includes('Посмотреть все комментарии')) {
+                        commentsSection.innerHTML = `<div><span class="username">your_username</span> ${input.value}</div>`;
+                    } else {
+                        commentsSection.innerHTML += `<div><span class="username">your_username</span> ${input.value}</div>`;
+                    }
+                    
+                    input.value = '';
+                }
+            });
+        });
+
+        // Обработка нажатия Enter в поле комментария
+        document.querySelectorAll('.add-comment input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    this.parentElement.querySelector('button').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
